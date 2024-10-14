@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caesar Cipher Encryption</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+         <h1>Caesar Cipher Tool</h1>
+        <form id="cipherForm" onsubmit="return performCipher();">
+            <label for="inputText">Input Text:</label>
+            <input type="text" id="inputText" required>
+
+            <label for="shift">Shift:</label>
+            <input type="number" id="shift" value="3" required>
+
+            <label for="operation">Choose Operation:</label>
+            <select id="operation">
+                <option value="encrypt">Encrypt</option>
+                <option value="decrypt">Decrypt</option>
+            </select>
+
+            <input type="submit" value="Submit">
+        </form>
+
+        <!-- Output section -->
+        <div id="outputSection">
+            <h2>Output:</h2>
+            <p id="outputText"></p>
+        </div>
+    </div>
+
+    <!-- JavaScript for handling Caesar Cipher logic -->
+    <script>
+        // Function to perform Caesar Cipher operation (encrypt/decrypt)
+        function performCipher() {
+            const inputText = document.getElementById('inputText').value;
+            const shift = parseInt(document.getElementById('shift').value);
+            const operation = document.getElementById('operation').value;
+            const outputText = document.getElementById('outputText');
+
+            // Check if the operation is encrypt or decrypt
+            let resultText;
+            if (operation === 'encrypt') {
+                resultText = caesarCipher(inputText, shift);
+            } else {
+                 resultText = caesarCipher(inputText, 26 - shift);  // Decryption reverses the shift
+            }
+
+            // Output the result
+            outputText.textContent = resultText;
+            return false;  // Prevent page reload
+        }
+
+        // Caesar Cipher algorithm function
+        function caesarCipher(text, shift) {
+            let result = '';
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+
+                if (char.match(/[a-z]/i)) {
+                    const code = text.charCodeAt(i);
+                    let base = (code >= 65 && code <= 90) ? 65 : 97; // Determine upper or lower case
+
+                    char = String.fromCharCode(((code - base + shift) % 26) + base);
+                }
+                result += char;
+            }
+            return result;
+        }
+    </script>
+</body>
+</html>
